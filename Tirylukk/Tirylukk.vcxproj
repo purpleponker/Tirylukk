@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\collision_phys.h" />
+    <ClInclude Include="src\comp_tags.h" />
     <ClInclude Include="src\entities\animations.h" />
     <ClInclude Include="src\entities\comp_collider.h" />
     <ClInclude Include="src\entities\entity_comps.h" />

@@ -21,10 +21,9 @@ public:
 	
 	bool loop_display();
 
-	static void add_tile(int tile_id, int x, int y);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-	static std::vector<comp_collider_class*> collider_list;
+
 	static bool is_running;
 	static SDL_Rect camera_display;
 	static const int tile_size_32 = 32;

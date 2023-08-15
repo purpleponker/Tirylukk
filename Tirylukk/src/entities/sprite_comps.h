@@ -68,7 +68,7 @@ public:
 		dest_rect.h = transform->height * transform->scaler;
 	}
 
-	//draw texture for rendering in game code
+	//draw texture for rendering to in game display 
 	void draw() override {
 		texture_class::draw_texture(texture, src_rect, dest_rect, sprite_flip);
 	}

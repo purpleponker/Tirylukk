@@ -1,27 +1,63 @@
 #include "engine.h"
 #include "map.h"
 #include <fstream>
-//temp map file
+#include "entities/entity_comps.h"
+#include "entities/components.h"
+
+extern ent_man_class entity_manager;
 	
 
-map_class::map_class() {
+map_class::map_class(const char * file_path, int x_size, int y_size , int t_size, int t_scaler) : map_file_path(file_path),
+	map_length(x_size), map_height(y_size), map_tile_size(t_size), tile_scaler_val(t_scaler){
+	scaled_tile = map_tile_size * tile_scaler_val;
 }
 
 
 map_class::~map_class() {
 }
 
-void map_class::load_map(std::string file_path, int size_x, int size_y){
-	char tile_name;
+void map_class::load_map(){
+	char f_input;
 	std::fstream map_file;
-	map_file.open(file_path);
+	map_file.open(map_file_path);
 
 	//tile_32 is used here for size of tiles since tile textures are 32 pixels, changes to tile size will be udpated thoughout the code but here is a note for future me.
 	//could make golbal tile size var or something in future to reduce hard code confusion with game expansion
-	for (int y = 0; y < size_y; y++) {
-		for (int x = 0; x < size_x; x++) {
-			map_file.get(tile_name);
-			game_class::add_tile(atoi(&tile_name), x * tile_32, y * tile_32);
+	for (int y = 0; y < map_height; y++) {
+		for (int x = 0; x < map_length; x++) {
+			map_file.get(f_input);
+			add_tile(atoi(&f_input), x * scaled_tile, y * scaled_tile);
+			map_file.ignore();
+		}
+	}
+	
+	//ignore the line between map layers in map file
+	map_file.ignore();
+
+	for (int y = 0; y < map_height; y++) {
+		for (int x = 0; x < map_length; x++) {
+			map_file.get(f_input);
+			if (f_input != 0) {
+				auto& col_tag(entity_manager.add_entity());
+				switch (atoi(&f_input)){
+				//terrain collision
+				case 1:
+				{
+					col_tag.add_component<comp_collider_class>(terrain_tag, x * scaled_tile, y * scaled_tile, scaled_tile);
+					col_tag.add_to_group(colliders_group);
+					break;
+				}
+				//object collision
+				case 2:
+				{
+					col_tag.add_component<comp_collider_class>(terrain_tag, x * scaled_tile, y * scaled_tile, scaled_tile);
+					col_tag.add_to_group(colliders_group);
+					break;
+				}
+				default:
+					break;
+				}
+			}
 			map_file.ignore();
 		}
 	}
@@ -30,5 +66,15 @@ void map_class::load_map(std::string file_path, int size_x, int size_y){
 
 }
 
+void map_class::add_tile(int tile_id, int x, int y) {
+	auto& tile(entity_manager.add_entity());
+	tile.add_component<tile_comp_class>(x, y, scaled_tile, scaled_tile, tile_id);
+	tile.add_to_group(map_group);
+}
+
+int map_class::get_scaler() {
+	int scale_val = tile_scaler_val;
+	return scale_val;
+}
 
 

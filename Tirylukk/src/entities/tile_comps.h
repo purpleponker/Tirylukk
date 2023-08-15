@@ -5,15 +5,16 @@
 #include "SDL.h"
 #include "entity_comps.h"
 
+
 //class for map tile creations
 class tile_comp_class : public component_class {
 public:
-	trans_comp_class* transform;
-	sprite_class* sprite_text;
+	trans_comp_class* transform = NULL;
+	sprite_class* sprite_text = NULL;
 	SDL_Rect tile_dims;
 	vector_2D_class position_holder; //holds original position while camera moves around the map
 	int tile_id;
-	const char* file_path;
+	const char* file_path = NULL;
 
 	tile_comp_class() = default;
 	tile_comp_class(int x, int y, int w, int h, int tile_sprite_id) {
@@ -46,7 +47,8 @@ public:
 	}
 
 	void init() override {
-		entity->add_component<trans_comp_class>(static_cast<float>(tile_dims.x), static_cast<float>(tile_dims.y), tile_dims.w, tile_dims.h, 1);
+		
+		entity->add_component<trans_comp_class>(static_cast<float>(tile_dims.x), static_cast<float>(tile_dims.y), tile_dims.w , tile_dims.h, 1);
 		transform = &entity->get_component<trans_comp_class>();
 		entity->add_component<sprite_class>(file_path);
 		sprite_text = &entity->get_component<sprite_class>();

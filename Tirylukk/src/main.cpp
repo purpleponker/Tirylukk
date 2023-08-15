@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include "engine.h"
+//global 
 
 game_class* game = nullptr;
 
