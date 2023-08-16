@@ -26,7 +26,23 @@ void map_class::load_map(){
 	for (int y = 0; y < map_height; y++) {
 		for (int x = 0; x < map_length; x++) {
 			map_file.get(f_input);
-			add_tile(atoi(&f_input), x * scaled_tile, y * scaled_tile);
+			switch (atoi(&f_input))
+			{
+			case 0: {
+				add_tile(dirt_tag, x * scaled_tile, y * scaled_tile);
+				break;
+			}				
+			case 1: {
+				  add_tile(grass_tag, x * scaled_tile, y * scaled_tile);
+				  break;
+			}
+			case 2: {
+				add_tile(water_tag, x * scaled_tile, y * scaled_tile);
+				break;
+			}
+			default:
+				break;
+			}
 			map_file.ignore();
 		}
 	}
@@ -66,7 +82,7 @@ void map_class::load_map(){
 
 }
 
-void map_class::add_tile(int tile_id, int x, int y) {
+void map_class::add_tile(Uint32 tile_id, int x, int y) {
 	auto& tile(entity_manager.add_entity());
 	tile.add_component<tile_comp_class>(x, y, scaled_tile, scaled_tile, tile_id);
 	tile.add_to_group(map_group);

@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\asset_manager.cpp" />
     <ClCompile Include="src\collision_phys.cpp" />
     <ClCompile Include="src\entities\entity_comps.cpp" />
     <ClCompile Include="src\engine.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\asset_manager.h" />
     <ClInclude Include="src\collision_phys.h" />
     <ClInclude Include="src\comp_tags.h" />
     <ClInclude Include="src\entities\animations.h" />

@@ -5,6 +5,7 @@
 #include "animations.h"
 #include "../engine.h"
 #include <map>
+#include "../asset_manager.h"
 
 class game_class;
 
@@ -13,34 +14,33 @@ public:
 
 	//animation public members
 	int animation_index = 0;
-	SDL_RendererFlip sprite_flip = SDL_FLIP_NONE;
+	SDL_RendererFlip sprite_flip = SDL_FLIP_NONE;	
 	std::map<const char*, animation> animations;
 
 	sprite_class() = default;
 	
 	//static sprites
-	sprite_class(const char* file_path) {
-		set_texture(file_path);
+	sprite_class(Uint32 asset_tag) {
+		set_texture(asset_tag);
 	}
 
 	//animated sprites
-	sprite_class(const char* file_path, bool src_is_animated) {
+	sprite_class(Uint32 asset_tag, bool src_is_animated) {
 		is_animated = src_is_animated;
 		animation idle_anim = animation(0, 3, 100); //index 0, 3 frames, 100 ms speed delay
 		animation walk_anim = animation(1, 8, 100);
 
 		animations.emplace("idle", idle_anim);
 		animations.emplace("walk", walk_anim);
-		set_texture(file_path);
+		set_texture(asset_tag);
 	}
 
 	~sprite_class() {
-		SDL_DestroyTexture(texture);
 	}
 
 	//functions to change texture of component
-	void set_texture(const char* file_path) {
-		texture = texture_class::load_texture(file_path);
+	void set_texture(Uint32 asset_tag) {
+		texture = game_class::asset_manager->get_texture(asset_tag);
 	}
 
 	//initialize texture size and position

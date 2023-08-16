@@ -18,8 +18,8 @@ vector_2D_class & vector_2D_class::add(const vector_2D_class& vector) {
 }
 
 vector_2D_class& vector_2D_class::subtract(const vector_2D_class& vector) {
-	this->x_pos /= vector.x_pos;
-	this->y_pos /= vector.y_pos;
+	this->x_pos -= vector.x_pos;
+	this->y_pos -= vector.y_pos;
 	return *this;
 }
 vector_2D_class& vector_2D_class::multiply(const vector_2D_class& vector) {
@@ -32,6 +32,12 @@ vector_2D_class& vector_2D_class::divide(const vector_2D_class& vector) {
 	this->y_pos /= vector.y_pos;
 	return *this;
 }
+vector_2D_class& vector_2D_class::inverse(const vector_2D_class& vector) {
+	this->x_pos = 0 - vector.x_pos;
+	this->y_pos = 0 - vector.y_pos;
+	return *this;
+}
+
 //operator overloads
 vector_2D_class& operator+(vector_2D_class& v1, const vector_2D_class& v2) {
 	return v1.add(v2);

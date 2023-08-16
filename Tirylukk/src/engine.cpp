@@ -3,6 +3,7 @@
 #include "collision_phys.h"
 #include "textures.h"
 #include "vector2D.h"
+#include "asset_manager.h"
 
 
 //game vars for entities, comps and objects
@@ -14,6 +15,7 @@ SDL_Event game_class::event;
 SDL_Rect game_class::camera_display = { 0,0,800,640 }; //x,y,w,h
 
 bool game_class::is_running = false;
+asset_man_class* game_class::asset_manager = new asset_man_class(&entity_manager);
 
 auto & player(entity_manager.add_entity());
 
@@ -45,14 +47,18 @@ void game_class::init(const char* title, int x_pos, int y_pos, int width, int he
 		is_running = true;
 	}
 	//set player texture and map txtures for rendering
+	asset_manager->add_texture(dirt_tag, "assets/dirt_texture.png");
+	asset_manager->add_texture(grass_tag, "assets/grass_texture.png");
+	asset_manager->add_texture(water_tag, "assets/water_texture.png");
+	asset_manager->add_texture(player_tag, "assets/temp_player_anims.png");
 	game_map = new map_class("assets/pixel_map16x16.map", 16, 16, 32, 4);
 	game_map->load_map();
 	
 	//implement entity components render processing
 	
 	//add componets to corresponding managers
-	player.add_component<trans_comp_class>(5);
-	player.add_component<sprite_class>("assets/temp_player_anims.png", true); //true is the animation flag to use animation contructor and build animations, might make a var to use later
+	player.add_component<trans_comp_class>(3);
+	player.add_component<sprite_class>(player_tag, true); //true is the animation flag to use animation contructor and build animations, might make a var to use later
 	player.add_component<input_controls_class>();
 	player.add_component<comp_collider_class>(player_tag);
 	player.add_to_group(players_group);
@@ -93,7 +99,8 @@ void game_class::update_display() {
 	//detect object/entity collisions
 	for (auto cl : collider_list) {
 		SDL_Rect obj_col = cl->get_component<comp_collider_class>().collider_dims;
-		if(collision_class::AABB_collision(player_col, obj_col)){
+		if (collision_class::AABB_collision(player_col, obj_col)) {
+			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 9, 9, 3, 3); //25 cells per grid, 3 quads per side, corners shared
 			player.get_component<trans_comp_class>().position = player_pos;
 		}
 	}
@@ -107,21 +114,12 @@ void game_class::update_display() {
 		camera_display.x = 0;
 	if (camera_display.y < 0)
 		camera_display.y = 0;
-	if (camera_display.x * 2 > camera_display.w * game_map->get_scaler())
-		camera_display.x = (camera_display.w * game_map->get_scaler() / 2 );
-	if (camera_display.y * 2 > camera_display.h * game_map->get_scaler())
-		camera_display.y = camera_display.h * game_map->get_scaler() / 2;
-	
-	
-	//-----------scrolls all tiles around player, bad efficiency------------
-	/*
-	//scrolls all tiles not good
-	for (auto t : tiles_list) {
-		t->get_component<trans_comp_class>().position.x_pos += -(player.get_component<trans_comp_class>().velocity.x_pos * player.get_component<trans_comp_class>().speed);
-		t->get_component<trans_comp_class>().position.y_pos += -(player.get_component<trans_comp_class>().velocity.y_pos * player.get_component<trans_comp_class>().speed);
-	}
-	*/
+	if (camera_display.x * 2 > (camera_display.w * game_map->get_scaler()) - (camera_display.w / 2)) //crazy calcs just to offset camera overreach over map
+		camera_display.x = ((camera_display.w * game_map->get_scaler() / 2) - (camera_display.w  / 2));
+	if (camera_display.y * 2 > camera_display.h * game_map->get_scaler() + camera_display.y / 2)
+		camera_display.y = (camera_display.h * game_map->get_scaler() /2) + (camera_display.y / 2);
 }
+
 
 //renders the players/world/npcs to the diplay
 void game_class::render_display() {

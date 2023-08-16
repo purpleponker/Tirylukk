@@ -11,14 +11,15 @@
 class comp_collider_class : public component_class
 {
 public:
-	SDL_Rect collider_dims;
+	SDL_Rect collider_dims = {};
 	collider_comp_tag comp_tag;
+	Uint32 collision_loc = null_loc;
 
 	//display collision texutures 1 layer above map tile textures
-	SDL_Texture * obj_texture;
-	SDL_Rect src_rect, dest_rect;
+	SDL_Texture * obj_texture = NULL;
+	SDL_Rect src_rect, dest_rect = {};
 
-	trans_comp_class* transform;
+	trans_comp_class* transform = NULL;
 
 	//constructors for making colliders
 	comp_collider_class(collider_comp_tag t) {

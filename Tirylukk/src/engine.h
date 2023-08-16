@@ -5,7 +5,7 @@
 #include "vector2D.h"
 
 class comp_collider_class;
-
+class asset_man_class;
 
 class game_class {
 public:
@@ -28,6 +28,7 @@ public:
 	static SDL_Rect camera_display;
 	static const int tile_size_32 = 32;
 	static const int tile_size_64 = 64;
+	static asset_man_class * asset_manager;
 
 private:
 	int counter = 0;
