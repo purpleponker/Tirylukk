@@ -100,7 +100,11 @@ void game_class::update_display() {
 	for (auto cl : collider_list) {
 		SDL_Rect obj_col = cl->get_component<comp_collider_class>().collider_dims;
 		if (collision_class::AABB_collision(player_col, obj_col)) {
-			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 9, 9, 3, 3); //25 cells per grid, 3 quads per side, corners shared
+			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 4, 4, 2, 2); //4 cells per grid, 2 quads per side, corners shared
+			vector_2D_class rebound_vector;
+			collision_class::rebound_pos_vector(collision_loc, rebound_vector);
+			player_pos.x_pos = player_pos.x_pos + rebound_vector.x_pos;
+			player_pos.y_pos = player_pos.y_pos + rebound_vector.y_pos;
 			player.get_component<trans_comp_class>().position = player_pos;
 		}
 	}
