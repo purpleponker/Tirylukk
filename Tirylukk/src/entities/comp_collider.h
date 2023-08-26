@@ -40,8 +40,9 @@ public:
 
 		transform = &entity->get_component<trans_comp_class>();
 
-		//load colliding obj textures
-		obj_texture = texture_class::load_texture("assets/border_marker_32x32.png");
+		//load colliding world object and tile/terrain textures
+		engine_class::asset_manager->add_texture(border_tag, "assets/border_marker_32x32.png");
+		obj_texture = engine_class::asset_manager->get_texture(border_tag);
 		src_rect = { 0,0,32,32 };
 		dest_rect = { collider_dims.x, collider_dims.y, collider_dims.w, collider_dims.h };
 		

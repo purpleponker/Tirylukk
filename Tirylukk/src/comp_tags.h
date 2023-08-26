@@ -12,6 +12,7 @@ enum group_ids : Uint32{
 	object_group,
 	placeable_group,
 	resource_group,
+	projectile_group,
 };
 
 //for asset textures and collisions primarily
@@ -22,6 +23,7 @@ enum collider_comp_tag : Uint32 {
 	object_tag,
 	projectile_tag,
 	interactable_tag,
+	border_tag,
 };
 
 //for different tile asset ids for matching correct textures
@@ -69,4 +71,12 @@ enum collision_loc_tag : Uint32 {
 	diag_right_bot_tag,
 	//for 1 quad IE the whole rect
 	center_tag
+};
+
+//font types for asset managment
+enum font_tag : Uint32 {
+	font_1,
+	font_2,
+	font_3,
+	font_4
 };

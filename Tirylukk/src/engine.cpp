@@ -18,6 +18,7 @@ bool engine_class::is_running = false;
 asset_man_class* engine_class::asset_manager = new asset_man_class(&entity_manager);
 
 auto & player(entity_manager.add_entity());
+auto& ui_label(entity_manager.add_entity());
 
 engine_class::engine_class() {
 
@@ -46,31 +47,57 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 		}
 		is_running = true;
 	}
-	//set player texture and map txtures for rendering
+	//********************UI and fonts ********************
+	//SDL ttf for ui and fonts
+	if (TTF_Init() == -1) {
+		std::cout << "Error: SDL_TFF lib" << std::endl;
+	}
+
+	//********************textures ********************
+	//and map tile textures
 	asset_manager->add_texture(dirt_tag, "assets/dirt_texture.png");
 	asset_manager->add_texture(grass_tag, "assets/grass_texture.png");
 	asset_manager->add_texture(water_tag, "assets/water_texture.png");
+	//player textures
 	asset_manager->add_texture(player_tag, "assets/temp_player_anims.png");
+	//projectile textures
+	asset_manager->add_texture(projectile_tag, "assets/test_projectile.png");
+	//font textures
+	asset_manager->add_font(font_1, "assets/vgafix.fon", 16); //font tag, path, size
+
+	//******************** map ********************
+	//load map from file
 	game_map = new map_class("assets/pixel_map16x16.map", 16, 16, 32, 4);
 	game_map->load_map();
 	
-	//implement entity components render processing
-	
+	//******************** entity components ********************
+
 	//add componets to corresponding managers
 	player.add_component<trans_comp_class>(3);
 	player.add_component<sprite_class>(player_tag, true); //true is the animation flag to use animation contructor and build animations, might make a var to use later
 	player.add_component<input_controls_class>();
 	player.add_component<comp_collider_class>(player_tag);
 	player.add_to_group(players_group);
+
+	//UI and font text
+	SDL_Color white = { 255,255,255,255 };
+	ui_label.add_component<UI_label_class>(10, 10, "test string", font_1, white);
+
+	//********************projectiles ********************
+	//position vector, velocity vector, range, speed, asset id for texture
+	asset_manager->generate_projectile(vector_2D_class(0, 0), vector_2D_class(2,2), 200, 1, projectile_tag); //position vector could use player or eneymy position vectors too in future for arrows/guns/etc
+	asset_manager->generate_projectile(vector_2D_class(600,600), vector_2D_class(1, 1), 1000, 1, projectile_tag);
+	asset_manager->generate_projectile(vector_2D_class(0, 500), vector_2D_class(5, 1), 20000, 1, projectile_tag);
 }
 
 //make groupings using entity manager prior to rendering display this allows rendering order based on groups,
 //IE render map tiles, then render players, then enemies etc depending on preference.
-auto& tiles_list(entity_manager.get_group(map_group));
-auto& players_list(entity_manager.get_group(players_group));
-auto& enemies_list(entity_manager.get_group(enemies_group));
-auto& npcs_list(entity_manager.get_group(npcs_group));
+auto& tile_list(entity_manager.get_group(map_group));
+auto& player_list(entity_manager.get_group(players_group));
+auto& enemy_list(entity_manager.get_group(enemies_group));
+auto& npc_list(entity_manager.get_group(npcs_group));
 auto& collider_list(entity_manager.get_group(colliders_group));
+auto& projectile_list(entity_manager.get_group(projectile_group));
 
 //handles in game actions
 void engine_class::manage_events() {
@@ -93,6 +120,13 @@ void engine_class::update_display() {
 	SDL_Rect player_col = player.get_component<comp_collider_class>().collider_dims;
 	vector_2D_class player_pos = player.get_component<trans_comp_class>().position;
 
+	//initial UI update with player position using string stream
+	std::string player_ui;
+	std::string player_x = std::to_string(static_cast<int>(player_pos.x_pos));
+	std::string player_y = std::to_string(static_cast<int>(player_pos.y_pos));
+	player_ui = "Player position: " + player_x + ", " + player_y;
+	ui_label.get_component<UI_label_class>().set_label_text(player_ui, font_1);
+
 	entity_manager.refresh();
 	entity_manager.update();
 
@@ -108,6 +142,14 @@ void engine_class::update_display() {
 			player.get_component<trans_comp_class>().position = player_pos;
 		}
 	}
+	//detect projectile hits
+	for (auto& projectile : projectile_list) {
+		if (collision_class::AABB_collision(player.get_component<comp_collider_class>().collider_dims, projectile->get_component<comp_collider_class>().collider_dims)) {
+			std::cout << "projectile hit player." << std::endl;
+			projectile->destroy();
+		}
+	}
+
 	//display for moving player around the map
 	camera_display.x = player.get_component<trans_comp_class>().position.x_pos - (camera_display.w / 2); //half width
 	camera_display.y = player.get_component<trans_comp_class>().position.y_pos - (camera_display.h / 2); //half height
@@ -130,12 +172,12 @@ void engine_class::render_display() {
 	SDL_RenderClear(renderer);
 	//using groupings render in objects in order to display
 	//render tiles
-	for (auto& tile : tiles_list) {
+	for (auto& tile : tile_list) {
 		tile->draw();
 	}
 
 	//render player
-	for (auto& player : players_list) {
+	for (auto& player : player_list) {
 		player->draw();
 	}
 
@@ -145,14 +187,24 @@ void engine_class::render_display() {
 	}
 
 	//render npcs
-	for (auto & npc : npcs_list) {
+	for (auto & npc : npc_list) {
 		npc->draw();
 	}
 
 	//render enemies
-	for (auto & enemy : enemies_list) {
+	for (auto & enemy : enemy_list) {
 		enemy->draw();
 	}
+
+	//render projectiles
+	for (auto& projectile : projectile_list) {
+		projectile->draw();
+	}
+
+	//ui: fonts and labels
+	ui_label.draw();
+
+	//end of render order
 	SDL_RenderPresent(renderer);
 
 }

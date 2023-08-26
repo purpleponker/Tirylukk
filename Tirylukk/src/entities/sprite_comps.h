@@ -38,7 +38,7 @@ public:
 	~sprite_class() {
 	}
 
-	//functions to change texture of component
+	//functions for texture of component
 	void set_texture(Uint32 asset_tag) {
 		texture = engine_class::asset_manager->get_texture(asset_tag);
 	}
