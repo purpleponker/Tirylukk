@@ -13,8 +13,8 @@ public:
 		sprite = &entity->get_component<sprite_class>();
 	}
 	void update() override {
-		if (game_class::event.type == SDL_KEYDOWN) {
-			switch (game_class::event.key.keysym.sym)
+		if (engine_class::event.type == SDL_KEYDOWN) {
+			switch (engine_class::event.key.keysym.sym)
 			{
 			
 				case SDLK_w:
@@ -39,8 +39,8 @@ public:
 			}
 		}
 
-		if (game_class::event.type == SDL_KEYUP) {
-			switch (game_class::event.key.keysym.sym)
+		if (engine_class::event.type == SDL_KEYUP) {
+			switch (engine_class::event.key.keysym.sym)
 			{
 
 			case SDLK_w:
@@ -61,7 +61,7 @@ public:
 				sprite->play_animation("idle");
 				break;
 			case SDLK_ESCAPE:
-				game_class::is_running = false;
+				engine_class::is_running = false;
 			default:
 				break;
 			}

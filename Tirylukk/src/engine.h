@@ -7,10 +7,10 @@
 class comp_collider_class;
 class asset_man_class;
 
-class game_class {
+class engine_class {
 public:
-	game_class();
-	~game_class();
+	engine_class();
+	~engine_class();
 
 	//building
 	void init(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);

@@ -29,8 +29,8 @@ public:
 	}
 
 	void update() override {
-		tile_dims.x = position_holder.x_pos - game_class::camera_display.x;
-		tile_dims.y = position_holder.y_pos - game_class::camera_display.y;
+		tile_dims.x = position_holder.x_pos - engine_class::camera_display.x;
+		tile_dims.y = position_holder.y_pos - engine_class::camera_display.y;
 	}
 
 	void init() override {

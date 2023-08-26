@@ -26,5 +26,5 @@ void object_class::update_obj() {
 }
 
 void object_class::render_obj() {
-	SDL_RenderCopy(game_class::renderer, obj_texture, &src_rect, &dest_rect);
+	SDL_RenderCopy(engine_class::renderer, obj_texture, &src_rect, &dest_rect);
 }

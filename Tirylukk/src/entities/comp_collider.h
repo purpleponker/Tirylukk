@@ -56,8 +56,8 @@ public:
 			collider_dims.h = transform->height * transform->scaler;
 		}
 
-		dest_rect.x = collider_dims.x - game_class::camera_display.x;
-		dest_rect.y = collider_dims.y - game_class::camera_display.y;
+		dest_rect.x = collider_dims.x - engine_class::camera_display.x;
+		dest_rect.y = collider_dims.y - engine_class::camera_display.y;
 	}
 
 	//draw layer 1: object collider above layer 0: map tiles

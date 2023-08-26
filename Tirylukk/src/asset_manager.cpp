@@ -1,5 +1,5 @@
 #include "asset_manager.h"
-//constructors/descructors
+//constructors/destructors
 
 asset_man_class::asset_man_class(ent_man_class * ent_man) : ent_manager(ent_man) {
 

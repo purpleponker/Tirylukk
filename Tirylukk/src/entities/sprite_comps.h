@@ -40,7 +40,7 @@ public:
 
 	//functions to change texture of component
 	void set_texture(Uint32 asset_tag) {
-		texture = game_class::asset_manager->get_texture(asset_tag);
+		texture = engine_class::asset_manager->get_texture(asset_tag);
 	}
 
 	//initialize texture size and position
@@ -62,8 +62,8 @@ public:
 
 		src_rect.y = animation_index * transform->height;
 		//then update position vectors
-		dest_rect.x = static_cast<int>(transform->position.x_pos) - game_class::camera_display.x;
-		dest_rect.y = static_cast<int>(transform->position.y_pos) - game_class::camera_display.y;
+		dest_rect.x = static_cast<int>(transform->position.x_pos) - engine_class::camera_display.x;
+		dest_rect.y = static_cast<int>(transform->position.y_pos) - engine_class::camera_display.y;
 		dest_rect.w = transform->width * transform->scaler;
 		dest_rect.h = transform->height * transform->scaler;
 	}

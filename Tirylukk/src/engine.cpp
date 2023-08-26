@@ -10,24 +10,24 @@
 map_class* game_map;
 ent_man_class entity_manager;
 
-SDL_Renderer* game_class::renderer = nullptr;
-SDL_Event game_class::event;
-SDL_Rect game_class::camera_display = { 0,0,800,640 }; //x,y,w,h
+SDL_Renderer* engine_class::renderer = nullptr;
+SDL_Event engine_class::event;
+SDL_Rect engine_class::camera_display = { 0,0,800,640 }; //x,y,w,h
 
-bool game_class::is_running = false;
-asset_man_class* game_class::asset_manager = new asset_man_class(&entity_manager);
+bool engine_class::is_running = false;
+asset_man_class* engine_class::asset_manager = new asset_man_class(&entity_manager);
 
 auto & player(entity_manager.add_entity());
 
-game_class::game_class() {
+engine_class::engine_class() {
 
 }
 
-game_class::~game_class() {
+engine_class::~engine_class() {
 
 }
 
-void game_class::init(const char* title, int x_pos, int y_pos, int width, int height, bool is_fullscreen) {
+void engine_class::init(const char* title, int x_pos, int y_pos, int width, int height, bool is_fullscreen) {
 	//initialize SDL window with API
 	int fullscreen_flag = 0;
 	if (is_fullscreen) {
@@ -73,7 +73,7 @@ auto& npcs_list(entity_manager.get_group(npcs_group));
 auto& collider_list(entity_manager.get_group(colliders_group));
 
 //handles in game actions
-void game_class::manage_events() {
+void engine_class::manage_events() {
 	SDL_PollEvent(&event);
 
 	switch (event.type) {
@@ -88,7 +88,7 @@ void game_class::manage_events() {
 
 
 //update players/nps/world entities and components to display for game loop
-void game_class::update_display() {
+void engine_class::update_display() {
 	//temp for player collision hold player old position to stop them from moving through the object
 	SDL_Rect player_col = player.get_component<comp_collider_class>().collider_dims;
 	vector_2D_class player_pos = player.get_component<trans_comp_class>().position;
@@ -100,7 +100,7 @@ void game_class::update_display() {
 	for (auto cl : collider_list) {
 		SDL_Rect obj_col = cl->get_component<comp_collider_class>().collider_dims;
 		if (collision_class::AABB_collision(player_col, obj_col)) {
-			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 2, 2); //4 cells per grid, 2 quads per side, corners shared
+			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 2, 2);// 2 quads per side, corners shared
 			vector_2D_class rebound_vector;
 			collision_class::rebound_pos_vector(collision_loc, rebound_vector);
 			player_pos.x_pos = player_pos.x_pos + rebound_vector.x_pos;
@@ -126,7 +126,7 @@ void game_class::update_display() {
 
 
 //renders the players/world/npcs to the diplay
-void game_class::render_display() {
+void engine_class::render_display() {
 	SDL_RenderClear(renderer);
 	//using groupings render in objects in order to display
 	//render tiles
@@ -157,7 +157,7 @@ void game_class::render_display() {
 
 }
 //clean displayer and destroy memory when game loop ends
-void game_class::clean_display() {
+void engine_class::clean_display() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
@@ -165,6 +165,6 @@ void game_class::clean_display() {
 }
 
 //helper func to loop display
-bool game_class::loop_display() {
+bool engine_class::loop_display() {
 	return is_running;
 }
