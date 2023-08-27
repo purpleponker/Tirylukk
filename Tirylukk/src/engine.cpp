@@ -12,6 +12,8 @@ ent_man_class entity_manager;
 
 SDL_Renderer* engine_class::renderer = nullptr;
 SDL_Event engine_class::event;
+
+//prob need to change this for variable screen size to clamp proper
 SDL_Rect engine_class::camera_display = { 0,0,800,640 }; //x,y,w,h
 
 bool engine_class::is_running = false;
@@ -67,7 +69,7 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 
 	//******************** map ********************
 	//load map from file
-	game_map = new map_class("assets/pixel_map16x16.map", 16, 16, 32, 4);
+	game_map = new map_class("assets/pixel_map16x16.map", 16, 16, 32, 10);
 	game_map->load_map();
 	
 	//******************** entity components ********************
@@ -145,7 +147,6 @@ void engine_class::update_display() {
 	//detect projectile hits
 	for (auto& projectile : projectile_list) {
 		if (collision_class::AABB_collision(player.get_component<comp_collider_class>().collider_dims, projectile->get_component<comp_collider_class>().collider_dims)) {
-			std::cout << "projectile hit player." << std::endl;
 			projectile->destroy();
 		}
 	}
@@ -155,7 +156,7 @@ void engine_class::update_display() {
 	camera_display.y = player.get_component<trans_comp_class>().position.y_pos - (camera_display.h / 2); //half height
 
 	//testing the camera on scaled map 
-	//clap camera to screen
+	//clap camera to screen and map size doesnt work on variable size widows for now prob due to camera rect values being hard coded
 	//min side
 	if (camera_display.x < 0)
 		camera_display.x = 0;

@@ -11,8 +11,13 @@ int main(int argc, char** argv) {
 	const int frame_delay = 1000 / fps;
 	Uint32 frame_start;
 	int frame_time;
+	int screen_height;
+	int screen_width;
 
-	game_engine->init("Tiyrlukk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+	screen_width = 1920;
+	screen_height = 1080;
+
+	game_engine->init("Tiyrlukk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screen_width, screen_height, false);
 	while (game_engine->loop_display()) {
 		//manage game time in frames
 		frame_start = SDL_GetTicks();

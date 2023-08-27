@@ -21,8 +21,10 @@ void map_class::load_map(){
 	std::fstream map_file;
 	map_file.open(map_file_path);
 
-	//tile_32 is used here for size of tiles since tile textures are 32 pixels, changes to tile size will be udpated thoughout the code but here is a note for future me.
-	//could make golbal tile size var or something in future to reduce hard code confusion with game expansion
+	//map class contains the tile sizing and scale for add_tile function
+	//currently using a .txt file with a CSV style, consider using a 2D array in the future for dynamic map sizing and generation
+	//as opposed to making map file, either way to generate maps either a 2 level nested for loop or a 2d array is required to build new maps
+	//consider which is more efficient and decide the best way in the future
 	for (int y = 0; y < map_height; y++) {
 		for (int x = 0; x < map_length; x++) {
 			map_file.get(f_input);
@@ -49,7 +51,8 @@ void map_class::load_map(){
 	
 	//ignore the line between map layers in map file
 	map_file.ignore();
-
+	
+	//second layer of map contains tiles with collisions
 	for (int y = 0; y < map_height; y++) {
 		for (int x = 0; x < map_length; x++) {
 			map_file.get(f_input);
