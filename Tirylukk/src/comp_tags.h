@@ -80,3 +80,17 @@ enum font_tag : Uint32 {
 	font_3,
 	font_4
 };
+
+//for menu buttons and clicks
+enum button_tag : Uint32 {
+	exit_button,
+	resume_button,
+	sub_menu_1,
+	sub_menu_2,
+	sub_menu_3,
+	sub_menu_4,
+	settings_button,
+	controls_button,
+
+};
+

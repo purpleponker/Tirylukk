@@ -9,15 +9,15 @@
 #include <string>
 
 
-class UI_label_class: public component_class{
+class UI_label_class : public component_class {
 
 public:
-	UI_label_class(int src_x_pos, int src_y_pos, std::string src_text, font_tag src_id, SDL_Color & src_color): label_text(src_text), font_id(src_id), text_color(src_color){
+	UI_label_class(int src_x_pos, int src_y_pos, std::string src_text, font_tag src_id, SDL_Color& src_color) : label_text(src_text), font_id(src_id), text_color(src_color) {
 		position.x = src_x_pos;
 		position.y = src_y_pos;
 		set_label_text(label_text, font_id);
 	}
-	~UI_label_class(){}
+	~UI_label_class() {}
 
 	void set_label_text(std::string text, font_tag id) {
 		SDL_Surface* surface = TTF_RenderText_Blended(engine_class::asset_manager->get_font(id), text.c_str(), text_color);

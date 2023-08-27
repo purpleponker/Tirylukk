@@ -20,7 +20,7 @@ bool engine_class::is_running = false;
 asset_man_class* engine_class::asset_manager = new asset_man_class(&entity_manager);
 
 auto & player(entity_manager.add_entity());
-auto& ui_label(entity_manager.add_entity());
+auto & ui_label(entity_manager.add_entity());
 
 engine_class::engine_class() {
 
@@ -213,8 +213,10 @@ void engine_class::render_display() {
 	SDL_RenderPresent(renderer);
 
 }
-//clean displayer and destroy memory when game loop ends
+//clean display and destroy memory when game loop ends
 void engine_class::clean_display() {
+	delete[] asset_manager;
+	delete[] game_map;
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();

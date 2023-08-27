@@ -163,6 +163,7 @@
     <ClCompile Include="src\collision_phys.cpp" />
     <ClCompile Include="src\entities\entity_comps.cpp" />
     <ClCompile Include="src\engine.cpp" />
+    <ClCompile Include="src\entities\menu.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map.cpp" />
     <ClCompile Include="src\object.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="src\entities\comp_collider.h" />
     <ClInclude Include="src\entities\entity_comps.h" />
     <ClInclude Include="src\entities\input_controls.h" />
+    <ClInclude Include="src\entities\menu.h" />
     <ClInclude Include="src\entities\projectiles_comps.h" />
     <ClInclude Include="src\entities\tile_comps.h" />
     <ClInclude Include="src\entities\transform_comps.h" />

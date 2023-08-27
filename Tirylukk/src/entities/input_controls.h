@@ -2,6 +2,7 @@
 
 #include "../engine.h"
 #include "transform_comps.h"
+#include "menu.h"
 
 class input_controls_class : public component_class {
 public:
