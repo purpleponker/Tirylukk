@@ -156,14 +156,18 @@ void engine_class::update_display() {
 
 	//testing the camera on scaled map 
 	//clap camera to screen
+	//min side
 	if (camera_display.x < 0)
 		camera_display.x = 0;
 	if (camera_display.y < 0)
 		camera_display.y = 0;
-	if (camera_display.x * 2 > (camera_display.w * game_map->get_scaler()) - (camera_display.w / 2)) //crazy calcs just to offset camera overreach over map
-		camera_display.x = ((camera_display.w * game_map->get_scaler() / 2) - (camera_display.w  / 2));
-	if (camera_display.y * 2 > camera_display.h * game_map->get_scaler() + camera_display.y / 2)
-		camera_display.y = (camera_display.h * game_map->get_scaler() /2) + (camera_display.y / 2);
+	//max side
+	if (camera_display.x > game_map->scaled_map_width() - camera_display.w) {
+		camera_display.x = game_map->scaled_map_width() - camera_display.w;
+	}
+	if (camera_display.y > game_map->scaled_map_height() - camera_display.h) {
+		camera_display.y = game_map->scaled_map_height() - camera_display.h;
+	}
 }
 
 

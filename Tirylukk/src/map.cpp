@@ -93,4 +93,13 @@ int map_class::get_scaler() {
 	return scale_val;
 }
 
+int map_class::scaled_map_width() {
+	int size = scaled_tile * map_length;
+	return size;
+}
+int map_class::scaled_map_height() {
+	int size = scaled_tile * map_height;
+	return size;
+}
+
 

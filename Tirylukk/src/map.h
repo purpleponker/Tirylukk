@@ -7,6 +7,8 @@ public:
 	void load_map(); // size here is not 32 pixels for tile size but for map file size in dimensions, if map is multiple files for different zones use zone file size dims
 	void add_tile(Uint32 tile_id, int x, int y);
 	int get_scaler();
+	int scaled_map_height();
+	int scaled_map_width();
 	
 private:
 	const char * map_file_path;
