@@ -38,39 +38,10 @@ enum tile_tag : Uint32 {
 //based on boat directions for Congruity
 enum collision_loc_tag : Uint32 {
 	null_loc,
-	//5 quads per side see no reason to add more
-	left_top_edge_tag,
-	top_mid_left_tag,
-	top_mid_tag,
-	top_mid_right_tag,
-	right_top_edge_tag,
-	left_mid_uppper_tag,
-	left_mid_tag,
-	left_mid_low_tag,
-	right_mid_upper_tag,
-	right_mid_tag,
-	right_mid_low_tag,
-	left_bot_edge_tag,
-	bot_mid_left_tag,
-	bot_mid_tag,
-	bot_mid_right_tag,
-	right_bot_edge_tag,
-	//for 3 quadrants per side
-	left_tag,		//port
-	right_tag,		//starboard
-	top_tag,		//bow
-	bottom_tag,		//stern
-	left_top_tag,	//etc.
-	left_bottom_tag,
-	right_top_tag,
-	right_bottom_tag,
-	//for 2 quads per side
-	diag_left_top_tag,
-	diag_right_top_tag,
-	diag_left_bot_tag,
-	diag_right_bot_tag,
-	//for 1 quad IE the whole rect
-	center_tag
+	quad_1,
+	quad_2,
+	quad_3,
+	quad_4
 };
 
 //font types for asset managment

@@ -24,8 +24,8 @@ public:
 	}
 	//add entity default position with scaler
 	trans_comp_class(int scale_val) {
-		position.x_pos = 400;
-		position.y_pos = 320;
+		position.x_pos = 2500;
+		position.y_pos = 2500;
 		scaler = scale_val;
 	}
 

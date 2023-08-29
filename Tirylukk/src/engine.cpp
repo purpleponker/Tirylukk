@@ -75,7 +75,7 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 	//******************** entity components ********************
 
 	//add componets to corresponding managers
-	player.add_component<trans_comp_class>(3);
+	player.add_component<trans_comp_class>(4);
 	player.add_component<sprite_class>(player_tag, true); //true is the animation flag to use animation contructor and build animations, might make a var to use later
 	player.add_component<input_controls_class>();
 	player.add_component<comp_collider_class>(player_tag);
@@ -119,7 +119,7 @@ void engine_class::manage_events() {
 //update players/nps/world entities and components to display for game loop
 void engine_class::update_display() {
 	//temp for player collision hold player old position to stop them from moving through the object
-	SDL_Rect player_col = player.get_component<comp_collider_class>().collider_dims;
+	comp_collider_class player_col = player.get_component<comp_collider_class>();
 	vector_2D_class player_pos = player.get_component<trans_comp_class>().position;
 
 	//initial UI update with player position using string stream
@@ -134,15 +134,15 @@ void engine_class::update_display() {
 
 	//detect object/entity collisions
 	for (auto cl : collider_list) {
-		SDL_Rect obj_col = cl->get_component<comp_collider_class>().collider_dims;
-		if (collision_class::AABB_collision(player_col, obj_col)) {
-			Uint32 collision_loc = collision_class::get_col_loc(player_col, obj_col, 2, 2);// 2 quads per side, corners shared
-			vector_2D_class rebound_vector;
-			collision_class::rebound_pos_vector(collision_loc, rebound_vector);
-			player_pos.x_pos = player_pos.x_pos + rebound_vector.x_pos;
-			player_pos.y_pos = player_pos.y_pos + rebound_vector.y_pos;
-			player.get_component<trans_comp_class>().position = player_pos;
-		}
+		comp_collider_class obj_col = cl->get_component<comp_collider_class>();
+			if (collision_class::AABB_collision(player_col, obj_col)){
+				vector_2D_class vector_modifer;
+				collision_class::rebound_vector(player_col.collider_dims, obj_col.collider_dims, vector_modifer);
+				player_pos.x_pos = player_pos.x_pos + vector_modifer.x_pos;
+				player_pos.y_pos = player_pos.y_pos + vector_modifer.y_pos;
+				std::cout << "rebound vector values: (" << vector_modifer.x_pos << ", " << vector_modifer.y_pos << ")" << std::endl;
+				player.get_component<trans_comp_class>().position = player_pos;
+			}
 	}
 	//detect projectile hits
 	for (auto& projectile : projectile_list) {

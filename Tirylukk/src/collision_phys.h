@@ -8,13 +8,14 @@ class comp_collider_class;
 
 class collision_class {
 public:
+	//consider making another AABB collision with a reduction of 1 rects size by an off set for less strict collision detection
+	//thinking about player collision in future with weapon swings need a way to extend or reduce hit boxes for weapons with reach
 	static bool AABB_collision(const SDL_Rect & rect1, const SDL_Rect & rect2);
 	static bool AABB_collision(const comp_collider_class & collider1, const comp_collider_class & collider2);
 	
-	//considered makin it private but not sure if better as public and called from engine as opposed to bein called within AABB_coll func
-	//if hit box reg gets wacky check to make sure quad count and cell count are resonable to contruct a grid in this func
-	static Uint32 get_col_loc(const SDL_Rect& rect1, const SDL_Rect& rect2, int quadrant_1, int quadrant_2); //cell count is total, quad is per side
-	static void rebound_pos_vector(Uint32 collision_tag, vector_2D_class& pos_modifer);
+	static void rebound_vector(const SDL_Rect& rect1, const SDL_Rect& rect2, vector_2D_class& pos_modifer);
+	//new rebound might replace
+	static void rebound_pos_vector(float rebound_angle, vector_2D_class& pos_modifer);
 private:
 	
 };
