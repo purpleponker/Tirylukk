@@ -41,3 +41,13 @@ void asset_man_class::add_font(font_tag font_id, std::string file_path, int font
 TTF_Font* asset_man_class::get_font(font_tag font_id) {
 	return font_list[font_id];
 }
+
+//add menu texture path to mapping list
+void asset_man_class::add_menu(menu_tag menu_id, std::string file_path, font_tag font_id) {
+	auto& menu(ent_manager->add_entity());
+	menu.add_component<menu_class>(menu_id, file_path, font_id);
+	menu.add_to_group(projectile_group); //maybe used for party menus, IE character inventories in a party for example
+
+
+	//menu_list.emplace();
+}

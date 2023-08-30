@@ -14,7 +14,7 @@ SDL_Renderer* engine_class::renderer = nullptr;
 SDL_Event engine_class::event;
 
 //prob need to change this for variable screen size to clamp proper
-SDL_Rect engine_class::camera_display = { 0,0,800,640 }; //x,y,w,h
+SDL_Rect engine_class::camera_display;//x,y,w,h
 
 bool engine_class::is_running = false;
 asset_man_class* engine_class::asset_manager = new asset_man_class(&entity_manager);
@@ -32,13 +32,21 @@ engine_class::~engine_class() {
 
 void engine_class::init(const char* title, int x_pos, int y_pos, int width, int height, bool is_fullscreen) {
 	//initialize SDL window with API
-	int fullscreen_flag = 0;
+	int screen_res_flag = 0;
 	if (is_fullscreen) {
-		fullscreen_flag = SDL_WINDOW_FULLSCREEN;
+		screen_res_flag = SDL_WINDOW_FULLSCREEN;
 	}
+	else
+		screen_res_flag = SDL_WINDOW_RESIZABLE;
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		std::cout << "SDL API Initialised." << std::endl;
-		window = SDL_CreateWindow(title, x_pos, y_pos, width, height, fullscreen_flag);
+		if (SDL_GetDesktopDisplayMode(0, &display_mode) != 0)
+		{
+			SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+			return;
+		}
+		window = SDL_CreateWindow(title, x_pos, y_pos, display_mode.w, display_mode.h, screen_res_flag);
 		if (window) {
 			std::cout << "window created." << std::endl;
 		}
@@ -48,11 +56,15 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 			std::cout << "renderer created." << std::endl;
 		}
 		is_running = true;
+		camera_display.x = screen.x = x_pos;
+		camera_display.y = screen.y = y_pos;
+		camera_display.w = screen.w = display_mode.w;
+		camera_display.h = screen.h = display_mode.h;
 	}
 	//********************UI and fonts ********************
 	//SDL ttf for ui and fonts
 	if (TTF_Init() == -1) {
-		std::cout << "Error: SDL_TFF lib" << std::endl;
+		std::cout << "Error: SDL_TFF lib" << SDL_GetError() << std::endl;
 	}
 
 	//********************textures ********************
@@ -84,6 +96,10 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 	//UI and font text
 	SDL_Color white = { 255,255,255,255 };
 	ui_label.add_component<UI_label_class>(10, 10, "test string", font_1, white);
+
+	//main menu
+	//asset_manager->add_menu(main_menu, "assets/menu_box-128x128.png", font_1);
+	
 
 	//********************projectiles ********************
 	//position vector, velocity vector, range, speed, asset id for texture
@@ -118,6 +134,8 @@ void engine_class::manage_events() {
 
 //update players/nps/world entities and components to display for game loop
 void engine_class::update_display() {
+	//update window size
+	
 	//temp for player collision hold player old position to stop them from moving through the object
 	comp_collider_class player_col = player.get_component<comp_collider_class>();
 	vector_2D_class player_pos = player.get_component<trans_comp_class>().position;
@@ -140,7 +158,6 @@ void engine_class::update_display() {
 				collision_class::rebound_vector(player_col.collider_dims, obj_col.collider_dims, vector_modifer);
 				player_pos.x_pos = player_pos.x_pos + vector_modifer.x_pos;
 				player_pos.y_pos = player_pos.y_pos + vector_modifer.y_pos;
-				std::cout << "rebound vector values: (" << vector_modifer.x_pos << ", " << vector_modifer.y_pos << ")" << std::endl;
 				player.get_component<trans_comp_class>().position = player_pos;
 			}
 	}
@@ -213,6 +230,11 @@ void engine_class::render_display() {
 	SDL_RenderPresent(renderer);
 
 }
+
+void engine_class::open_menu() {
+	
+}
+
 //clean display and destroy memory when game loop ends
 void engine_class::clean_display() {
 	delete[] asset_manager;

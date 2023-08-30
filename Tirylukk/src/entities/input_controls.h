@@ -16,8 +16,7 @@ public:
 	void update() override {
 		if (engine_class::event.type == SDL_KEYDOWN) {
 			switch (engine_class::event.key.keysym.sym)
-			{
-			
+			{			
 				case SDLK_w:
 					transform->velocity.y_pos = -1;
 					sprite->play_animation("walk");

@@ -13,6 +13,7 @@ enum group_ids : Uint32{
 	placeable_group,
 	resource_group,
 	projectile_group,
+	menu_group, //not sure if needed
 };
 
 //for asset textures and collisions primarily
@@ -63,5 +64,15 @@ enum button_tag : Uint32 {
 	settings_button,
 	controls_button,
 
+};
+
+//menu type tags
+enum menu_tag : Uint32 {
+	main_menu,
+	party_inventory,
+	settings,
+	controls,
+	map,
+	player_inventory,
 };
 

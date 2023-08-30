@@ -26,6 +26,7 @@ bool collision_class::AABB_collision(const comp_collider_class & collider1, cons
 		//to avoid object collision with itself, tho this might case collision dection issues in the future with things like
 		//projectiles colliding with other projectiles as they likely both have the same comp_tag
 		//AABB collision method with rects call about might be sufficient for such cases
+		//avoid player collision with self
 		if (collider1.comp_tag == collider2.comp_tag && collider1.comp_tag == player_tag) {
 			return false;
 		}

@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
 	screen_width = 1920;
 	screen_height = 1080;
 
+
 	game_engine->init("Tiyrlukk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screen_width, screen_height, false);
 	while (game_engine->loop_display()) {
 		//manage game time in frames

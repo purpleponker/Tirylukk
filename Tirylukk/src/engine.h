@@ -18,6 +18,7 @@ public:
 	void update_display();
 	void render_display();
 	void clean_display();
+	static void open_menu();
 	
 	bool loop_display();
 
@@ -33,4 +34,6 @@ public:
 private:
 	int counter = 0;
 	SDL_Window * window;
+	SDL_Rect screen;
+	SDL_DisplayMode display_mode;
 };

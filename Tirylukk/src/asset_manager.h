@@ -24,8 +24,12 @@ public:
 	void add_font(font_tag font_id, std::string file_path, int font_size);
 	TTF_Font* get_font(font_tag font_id);
 
+	//menu management
+	void add_menu(menu_tag menu_id, std::string file_path, font_tag font_id);
+
 private:
 	ent_man_class* ent_manager;
 	std::map<Uint32, SDL_Texture*> texture_list;
 	std::map<Uint32, TTF_Font*> font_list;
+	//std::map<Uint32, SDL_Texture*> menu_list;
 };
