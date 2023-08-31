@@ -9,9 +9,13 @@ public:
 	trans_comp_class* transform;
 	//temp solution for player animations allowing user input for animations on character
 	sprite_class* sprite;
+	menu_class* menu;
+
 	void init() override {
 		transform = &entity->get_component<trans_comp_class>();
 		sprite = &entity->get_component<sprite_class>();
+		menu = &entity->get_component<menu_class>();
+
 	}
 	void update() override {
 		if (engine_class::event.type == SDL_KEYDOWN) {

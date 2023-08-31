@@ -14,6 +14,15 @@ public:
 		button_offset.x_pos = 100.f;
 		button_offset.y_pos = 100.f;
 		build_menu();
+
+		//testing code
+		menu_rect.x = engine_class::camera_display.x / 2 - src_surface->w;
+		menu_rect.y = engine_class::camera_display.y / 2 - src_surface->h;
+		menu_rect.w = src_surface->w;
+		menu_rect.h = src_surface->h;
+		menu_texture = SDL_CreateTextureFromSurface(engine_class::renderer, src_surface);
+		SDL_QueryTexture(menu_texture, nullptr, nullptr, &menu_rect.w, &menu_rect.h);
+		SDL_FreeSurface(src_surface);
 	};
 	~menu_class() {};
 	void build_menu() {
@@ -28,30 +37,28 @@ public:
 				menu_rect.y = engine_class::camera_display.y / 2 - src_surface->h;
 				menu_rect.w = src_surface->w;
 				menu_rect.h = src_surface->h;
-				/*if (SDL_BlitSurface(src_surface, nullptr, combined_surf, &menu_rect) != 0) {
+				if (SDL_BlitSurface(src_surface, nullptr, combined_surf, &menu_rect) != 0) {
 					SDL_GetError();
 				}
 				SDL_FreeSurface(src_surface);
-				*/
+				
 				//layer buttons down over menu border surface
 				for (int i = 0; i < button_count; i++) {
 					x_offset_counter++;
 					y_offset_counter++;
-					//button_text = text[i];
-					//DL_Surface* surface = TTF_RenderText_Blended(engine_class::asset_manager->get_font(font_id), button_text.c_str(), text_color);
-					//dest_rect.x = engine_class::camera_display.x / 2 + button_offset.x_pos * x_offset_counter;
-					//dest_rect.y = engine_class::camera_display.y / 2 + button_offset.y_pos * y_offset_counter;
-					/*
+					button_text = text[i];
+					SDL_Surface* surface = TTF_RenderText_Blended(engine_class::asset_manager->get_font(font_id), button_text.c_str(), text_color);
+					dest_rect.x = engine_class::camera_display.x / 2 + button_offset.x_pos * x_offset_counter;
+					dest_rect.y = engine_class::camera_display.y / 2 + button_offset.y_pos * y_offset_counter;
+					
 					if (SDL_BlitSurface(surface, nullptr, combined_surf, &dest_rect) != 0) {
 						SDL_GetError();
 					}
 					SDL_FreeSurface(surface);
-					*/
 				}
-
 				//menu_texture = SDL_CreateTextureFromSurface(engine_class::renderer, combined_surf);
 				//SDL_QueryTexture(menu_texture, nullptr, nullptr, &menu_rect.w, &menu_rect.h);
-				//SDL_FreeSurface(combined_surf);
+				SDL_FreeSurface(combined_surf);
 				break;
 			}
 
@@ -80,8 +87,12 @@ public:
 
 	}
 
+	static void open_menu() {
+		
+	}
+	//draw textures
 	void draw() override {
-		//SDL_RenderCopy(engine_class::renderer, menu_texture, nullptr, &menu_rect);
+		SDL_RenderCopy(engine_class::renderer, menu_texture, nullptr, &menu_rect);
 	};
 private:
 	//*************menu item variables*************

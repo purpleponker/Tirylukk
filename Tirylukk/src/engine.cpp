@@ -21,6 +21,7 @@ asset_man_class* engine_class::asset_manager = new asset_man_class(&entity_manag
 
 auto & player(entity_manager.add_entity());
 auto & ui_label(entity_manager.add_entity());
+auto & menu(entity_manager.add_entity());
 
 engine_class::engine_class() {
 
@@ -91,6 +92,7 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 	player.add_component<sprite_class>(player_tag, true); //true is the animation flag to use animation contructor and build animations, might make a var to use later
 	player.add_component<input_controls_class>();
 	player.add_component<comp_collider_class>(player_tag);
+
 	player.add_to_group(players_group);
 
 	//UI and font text
@@ -98,7 +100,7 @@ void engine_class::init(const char* title, int x_pos, int y_pos, int width, int 
 	ui_label.add_component<UI_label_class>(10, 10, "test string", font_1, white);
 
 	//main menu
-	//asset_manager->add_menu(main_menu, "assets/menu_box-128x128.png", font_1);
+	menu.add_component<menu_class>(main_menu, "assets/menu_box-128x128.png", font_1);
 	
 
 	//********************projectiles ********************
@@ -225,6 +227,7 @@ void engine_class::render_display() {
 
 	//ui: fonts and labels
 	ui_label.draw();
+	menu.draw();
 
 	//end of render order
 	SDL_RenderPresent(renderer);
